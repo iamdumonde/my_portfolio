@@ -525,3 +525,55 @@ span {
         margin-top: 2rem;  
     }
 }
+
+
+
+/*
+
+
+
+Il semble que le composant Inertia conserve l'état actuel même après l'action de suppression. Pour résoudre ce problème, vous pouvez suivre ces étapes :
+
+1. **Effectuer la suppression** :
+
+   Assurez-vous que l'action de suppression dans votre contrôleur fonctionne correctement et que l'élément est correctement supprimé de votre base de données.
+
+2. **Gérer la redirection après la suppression** :
+
+   Après avoir supprimé l'élément, vous devez rediriger l'utilisateur vers la page appropriée. Par exemple, si vous supprimez un quiz, vous pouvez rediriger l'utilisateur vers la liste des quiz ou vers une autre page pertinente.
+
+   Assurez-vous d'utiliser la méthode `return redirect()->route(...)` ou `return redirect()->intended(...)` pour effectuer la redirection.
+
+3. **Ajouter un message de confirmation** (facultatif) :
+
+   Vous pouvez également ajouter un message de confirmation pour informer l'utilisateur que l'élément a été supprimé avec succès. Vous pouvez utiliser Laravel's session flash pour cela.
+
+   Par exemple, dans votre contrôleur après la suppression :
+
+   ```php
+   return redirect()->route('quiz.index')->with('success', 'Quiz supprimé avec succès.');
+   ```
+
+4. **Actualiser la page du côté client** :
+
+   Si vous utilisez Inertia avec Vue.js, vous pouvez actualiser la page côté client après la suppression en utilisant `this.$inertia.reload()`.
+
+   Par exemple, dans votre composant Vue :
+
+   ```javascript
+   methods: {
+     async deleteQuiz(quizId) {
+       // Logique pour supprimer le quiz...
+       await this.$inertia.post(route('quiz.destroy', { quiz: quizId }));
+       
+       // Actualiser la page après la suppression
+       this.$inertia.reload();
+     }
+   }
+   ```
+
+   Assurez-vous d'ajuster la méthode `deleteQuiz` en fonction de votre logique spécifique de suppression.
+
+Cela devrait permettre à l'élément supprimé de disparaître de la page sans nécessiter de réactualisation complète de la page. Si vous rencontrez toujours des problèmes, n'hésitez pas à me donner plus de détails et je serai ravi de vous aider davantage !
+
+*/
